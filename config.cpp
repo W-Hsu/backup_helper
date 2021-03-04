@@ -48,8 +48,10 @@ int __config_t::get_config() {
             excluded[s] = true;
         }
     } catch (std::exception &e) {
-        
+
     }
+
+    return 0;
 }
 
 int __config_t::change_destination(char const *new_dest) {
@@ -67,6 +69,7 @@ int __config_t::change_destination(const fs::path &new_dest) {
     fs::directory_entry new_dest_json(new_dest/"config.json");
     if (!(new_dest_json.is_regular_file())) return 2;
 
+    return get_config();
 }
 
 }
