@@ -14,8 +14,8 @@ public: \
 
 namespace wbackup {
 
+// file associated exceptions
 NEW_RUNTIME_ERROR_T(File_not_found);
-
 NEW_RUNTIME_ERROR_T(Bad_permission);
 
 } // namespace wbackup

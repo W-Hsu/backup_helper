@@ -1,4 +1,4 @@
-#include "headers/exceptions.h"
+#include "exceptions.h"
 #include <string>
 
 #define NEW_RUNTIME_ERROR_T_CONSTRUCTORS(TYPENAME) \
@@ -12,6 +12,7 @@ TYPENAME::TYPENAME(const TYPENAME &other) noexcept \
 namespace wbackup {
 
 NEW_RUNTIME_ERROR_T_CONSTRUCTORS(File_not_found);
+NEW_RUNTIME_ERROR_T_CONSTRUCTORS(Bad_permission);
 
 } // namespace wbackup
 
