@@ -4,7 +4,7 @@
 namespace wbackup {
 
 template <class T>
-int FileTree<T>::set(const std::string &path, const T &val) {
+int File_tree<T>::set(const std::string &path, const T &val) {
     size_t i = 0;
     while (path[i]!='/') ++i;
 

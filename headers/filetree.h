@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 namespace wbackup {
 
 template <class T>
-class FileTree {
+class File_tree {
 private:
     struct Node root;
 
@@ -27,7 +27,7 @@ public:
 };
 
 template <class T>
-struct FileTree<T>::Node {
+struct File_tree<T>::Node {
     std::map<std::string, Node*> children;
     T value;
 };
