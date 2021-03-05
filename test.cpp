@@ -3,9 +3,18 @@
 #include <fstream>
 #include <map>
 #include "headers/json.hpp"
+#include "config.h"
 namespace fs = std::filesystem;
 
 int main() {
+    fs::path p("./Users/whsu/Programming");
+    for (auto &i : p) {
+        std::cout << i.c_str() << std::endl;
+    }
+    return 0;
+}
+
+int main4() {
     std::map<int, int*> m;
     std::cout << std::boolalpha << (m[2]==nullptr) << std::endl;
     return 0;

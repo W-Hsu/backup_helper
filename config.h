@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <map>
+#include "headers/json.hpp"
 
 namespace fs = std::filesystem;
 
@@ -16,10 +17,6 @@ private:
     // config.json in this directory
     fs::path destination;
 
-    // denotes whether the destination has correct 
-    // config.json
-    bool available;
-
     // backup source path (canonical)
     fs::path source;
 
@@ -31,20 +28,30 @@ private:
 
     // read configuration from the destination selected now
     // called on change_destination()
-    int get_config();
+    //
+    // throws Bad_value
+    void get_config(const nlohmann::json &j);
 
 public:
+    __config_t() = default;
     __config_t(const __config_t &) = delete;
     __config_t(__config_t &&) = delete;
 
-    // Change the backup destination path, as well as the 
+    // Change the backup destination path, and read config.json
+    // associated with it into (*this)
     //
-    // information associated with it, by reading config 
-    // json in the new destination folder.
-    //
-    // checks if new_dest exists and json file exists
-    int change_destination(char const *new_dest);
-    int change_destination(const fs::path &new_dest);
+    // throws File_not_found on:
+    //      (1) new_dest_path is not a directory
+    //      (2) no config.json under new_dest_path
+    // 
+    // throws Bad_format on:
+    //      (1) bad json format
+    // 
+    // throws Bad_value on:
+    //      (1) missing complusory value in config.json
+    //      (2) illegal compulsory value in config.json
+    void change_destination(char const *new_dest);
+    void change_destination(const fs::path &new_dest);
 
     // change the source path of current backup
     // called on just recovered backup
@@ -52,13 +59,13 @@ public:
     int change_source(const fs::path &new_dest);
 
     // source and destination path getter
-    const fs::path &get_source_path() const;
     const fs::path &get_destination_path() const;
+    const fs::path &get_source_path() const;
+    const uint64_t get_max_size() const;
+    const bool is_excluded() const;
+};
 
-    // check the selected backup is available
-    bool is_available() const;
-
-} configuration;
+extern __config_t configuration;
 
 } // namespace wbackup
 

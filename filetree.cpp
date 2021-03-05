@@ -1,26 +1,25 @@
+#include <filesystem>
+
 #include "filetree.h"
 #include "misc.h"
+
+namespace fs = std::filesystem;
 
 namespace wbackup {
 
 template <class T>
-int File_tree<T>::set(const std::string &path, const T &val) {
-    size_t i = 0;
-    while (path[i]!='/') ++i;
+File_tree<T>::File_tree()
+    : children(1024), vals(1024) { }
 
-    std::string normalized_path = path.substr(i);
-    std::vector<std::string> splitted;
-    split(normalized_path, splitted, '/');
+template <class T>
+int File_tree<T>::set(const std::string &path_str, const T &val) {
+    fs::path p(path_str);
 
-    Node *now = &root;
-    for (auto &j : splitted) {
-        Node *child = now->children[j];
-        if (child==nullptr) {
-            now->children = child = new FileTree<T>::Node();
+    for (auto &i : p) {
+        if (!(children[now_node][i.string()])) {
+            
         }
     }
-
-    now->value = val;
 }
 
 }  // namespace wbackup

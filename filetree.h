@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <filesystem>
+#include <unordered_map>
 #include "misc.h"
 
 namespace fs = std::filesystem;
@@ -12,9 +13,23 @@ namespace wbackup {
 template <class T>
 class File_tree {
 private:
-    struct Node root;
+    // Node [1] is root (chroot to destination or source)
+    // Node [0] is unused
+
+    // node count (max node index)
+    size_t node_cnt;
+
+    // stores children pointers
+    std::vector<std::unordered_map<std::string, size_t> > children;
+
+    // stores values
+    std::vector<T> vals;
 
 public:
+    File_tree();
+
+    size_t new_node();
+
     int set(char const *, const T &);
     int set(const std::string &, const T &);
     int set(const fs::path &, const T &);
@@ -24,12 +39,6 @@ public:
     T get(const fs::path &);
 
     void clear();
-};
-
-template <class T>
-struct File_tree<T>::Node {
-    std::map<std::string, Node*> children;
-    T value;
 };
 
 } // namespace wbackup

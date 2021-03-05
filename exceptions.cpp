@@ -14,6 +14,9 @@ namespace wbackup {
 NEW_RUNTIME_ERROR_T_CONSTRUCTORS(File_not_found);
 NEW_RUNTIME_ERROR_T_CONSTRUCTORS(Bad_permission);
 
+NEW_RUNTIME_ERROR_T_CONSTRUCTORS(Bad_value);
+NEW_RUNTIME_ERROR_T_CONSTRUCTORS(Bad_format);
+
 } // namespace wbackup
 
 #undef NEW_RUNTIME_ERROR_T_CONSTRUCTORS
