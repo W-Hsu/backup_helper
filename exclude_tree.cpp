@@ -1,7 +1,8 @@
-#include <filesystem>
-
 #include "exclude_tree.h"
 #include "misc.h"
+
+#include <filesystem>
+#include <stack>
 
 namespace fs = std::filesystem;
 
@@ -42,11 +43,13 @@ void Exclude_tree::set(const fs::path &excluded_path_relative, bool val) {
     (*it) = val;
 }
 
-bool Exclude_tree::get(const fs::path &query_path) {
+bool Exclude_tree::get(const fs::path &query_path) const {
     bool ret = false;
     size_t now_node_index = 1;
     for (auto &i: query_path) {
-        size_t child_index = children[now_node_index][i.string()];
+        // std::unordered_map::operator[] is non-const, voilating const semantic
+        // use std::unordered_map::at instead
+        size_t child_index = children[now_node_index].at(i.string());
         
         if (!child_index)
             break;
@@ -58,6 +61,11 @@ bool Exclude_tree::get(const fs::path &query_path) {
             now_node_index = child_index;
     }
     return ret;
+}
+
+void Exclude_tree::traverse(std::vector<std::string> &traverse_result) const {
+    traverse_result.clear();
+    // TODO
 }
 
 void Exclude_tree::clear() {

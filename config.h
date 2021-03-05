@@ -3,7 +3,9 @@
 
 #include <filesystem>
 #include <map>
+
 #include "headers/json.hpp"
+#include "exclude_tree.h"
 
 namespace fs = std::filesystem;
 
@@ -21,7 +23,7 @@ private:
     fs::path source;
 
     // files and directories excluded from the backup
-    std::map<fs::path, bool> excluded;
+    Exclude_tree exclude_tree;
 
     // maximum size of the backup
     uint64_t max_size;
@@ -56,13 +58,13 @@ public:
     // change the source path of current backup
     // called on just recovered backup
     int change_source(char const *new_src);
-    int change_source(const fs::path &new_dest);
+    int change_source(const fs::path &new_src);
 
     // getters
     const fs::path &get_destination_path() const;
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
-    const bool is_excluded(const fs::path &query_path) const;
+    bool is_excluded(const fs::path &query_path) const;
 };
 
 extern __config_t configuration;

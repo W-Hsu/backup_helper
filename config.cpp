@@ -1,6 +1,7 @@
 #include "config.h"
 #include "exceptions.h"
 #include "headers/json.hpp"
+
 #include <boost/format.hpp>
 #include <fstream>
 
@@ -30,13 +31,17 @@ void __config_t::get_config(const nlohmann::json &j) {
 
     // optional values
     //  * excluded folders
-    excluded.clear();
+    exclude_tree.clear();
     try {
         auto excluded_list = j["exclude"];
         for (auto &i : excluded_list) {
             std::string s;
             nlohmann::from_json(i, s);
-            excluded[s] = true;
+            
+            fs::path p(s);
+            fs::relative(p, source);
+
+            exclude_tree.set(p, true);
         }
     } catch (std::exception &e) {
 
@@ -92,6 +97,12 @@ void __config_t::change_destination(const fs::path &new_dest_path) {
     get_config(j);
 
     destination = fs::canonical(new_dest_path);
+}
+
+bool __config_t::is_excluded(const fs::path &query_path) const {
+    fs::path p(query_path);
+    fs::relative(p, source);
+    return exclude_tree.get(p);
 }
 
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include <filesystem>
 #include <unordered_map>
+
 #include "misc.h"
 
 namespace fs = std::filesystem;
@@ -19,6 +20,7 @@ private:
     size_t node_cnt;
 
     // stores children pointers
+    // map or unordered_map, that is a question
     std::vector<std::unordered_map<std::string, size_t> > children;
 
     // stores values
@@ -31,7 +33,9 @@ public:
 
     void set(const fs::path &, bool);
 
-    bool get(const fs::path &);
+    bool get(const fs::path &) const;
+
+    void traverse(std::vector<std::string> &traverse_result) const;
 
     void clear();
 };
