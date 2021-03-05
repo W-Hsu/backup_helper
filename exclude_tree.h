@@ -1,5 +1,5 @@
-#ifndef _FILETREE_H
-#define _FILETREE_H
+#ifndef _EXCLUDE_TREE_H
+#define _EXCLUDE_TREE_H
 
 #include <vector>
 #include <filesystem>
@@ -10,8 +10,7 @@ namespace fs = std::filesystem;
 
 namespace wbackup {
 
-template <class T>
-class File_tree {
+class Exclude_tree {
 private:
     // Node [1] is root (chroot to destination or source)
     // Node [0] is unused
@@ -23,20 +22,16 @@ private:
     std::vector<std::unordered_map<std::string, size_t> > children;
 
     // stores values
-    std::vector<T> vals;
+    std::vector<bool> vals;
 
 public:
-    File_tree();
+    Exclude_tree();
 
     size_t new_node();
 
-    int set(char const *, const T &);
-    int set(const std::string &, const T &);
-    int set(const fs::path &, const T &);
+    void set(const fs::path &, bool);
 
-    T get(char const *);
-    T get(const std::string &);
-    T get(const fs::path &);
+    bool get(const fs::path &);
 
     void clear();
 };

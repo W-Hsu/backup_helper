@@ -7,6 +7,18 @@
 namespace fs = std::filesystem;
 
 int main() {
+    std::vector<bool> vb({true, true, true});
+}
+
+int main6() {
+    fs::path p("/Users/whsu");
+    fs::path pr("We/sdd");
+    fs::relative(pr, p);
+    std::cout << pr.string() << std::endl;
+    return 0;
+}
+
+int main5() {
     fs::path p("./Users/whsu/Programming");
     for (auto &i : p) {
         std::cout << i.c_str() << std::endl;
@@ -38,6 +50,7 @@ int main2() {
     www2 xxx;
     const www2 &yyy = xxx;
     yyy.getr_c();
+    return 0;
 }
 
 int main1() {
