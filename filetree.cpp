@@ -15,9 +15,11 @@ template <class T>
 int File_tree<T>::set(const std::string &path_str, const T &val) {
     fs::path p(path_str);
 
+    size_t now_node = 1;
     for (auto &i : p) {
+        if (!(children.))
         if (!(children[now_node][i.string()])) {
-            
+            now_node = children[now_node][i.string()] = new_node();
         }
     }
 }

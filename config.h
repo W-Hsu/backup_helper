@@ -58,11 +58,11 @@ public:
     int change_source(char const *new_src);
     int change_source(const fs::path &new_dest);
 
-    // source and destination path getter
+    // getters
     const fs::path &get_destination_path() const;
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
-    const bool is_excluded() const;
+    const bool is_excluded(const fs::path &query_path) const;
 };
 
 extern __config_t configuration;
