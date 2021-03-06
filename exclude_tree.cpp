@@ -65,6 +65,22 @@ bool Exclude_tree::get(const fs::path &query_path) const {
 
 void Exclude_tree::traverse(std::vector<std::string> &traverse_result) const {
     traverse_result.clear();
+    std::stack<std::pair<fs::path, size_t> > s;
+
+    s.push(std::make_pair(fs::path(""), 1));
+
+    while (!s.empty()) {
+        auto now = s.top(); s.pop();
+
+        for (auto &i: children[now.second]) {
+            fs::path child = now.first / i.first;
+
+            if (vals[i.second]==true)
+                traverse_result.push_back(child.string());
+            else
+                s.push(std::make_pair(child, i.second));
+        }
+    }
     // TODO
 }
 
