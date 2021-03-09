@@ -1,39 +1,63 @@
 #include "backup.h"
 #include "config.h"
+#include "file_change_tree.h"
 
 #include <filesystem>
+#include <exception>
 
 namespace fs = std::filesystem;
 
 namespace wbackup {
 
-void full_backup(fs::path now_relative) {
+// TODO exception handling
+void full_backup() {
     static fs::path dst = configuration.get_destination_path() / "back_data" / get_system_time();
     const fs::path &src = configuration.get_source_path();
-
-    if (configuration.is_excluded(now_relative))
-        return;
     
-    fs::directory_iterator di(src/now_relative);
-    for (auto &every_ent: di) {
-        fs::path child_relative = every_ent.path();
-        fs::relative(child_relative, src);
-
-        if (every_ent.is_directory()) {
-            fs::create_directory(dst/child_relative);
-            full_backup(child_relative);
+    fs::recursive_directory_iterator rec_iterator(src);
+    for (auto &i: rec_iterator) {
+        fs::path relative_child = fs::relative(i, src);
+        fs::path dest_match(dst / relative_child);
+        
+        if (configuration.is_excluded(relative_child)) {
+            continue;
         }
-        else if (every_ent.is_regular_file())
-            fs::copy_file(src/child_relative, dst/child_relative);  // TODO exception handling
-    } 
+
+        if (i.is_directory()) {
+            fs::create_directory(dest_match);
+        } else if (i.is_regular_file()) {
+            fs::copy(i, dest_match);
+        }
+    }
 }
 
+// TODO exception handling
 void incremental_backup() {
-    
+    try {
+        static fs::path dst = configuration.get_destination_path() / "backup_data";
+        const fs::path &src = configuration.get_source_path();
+
+        File_change_tree *file_change_tree = new File_change_tree();
+        file_change_tree->make_tree(dst, src);
+
+        delete file_change_tree;
+    } catch (std::exception &ex) {
+
+    }
 }
 
 void merge_backup() {
-    
+    // preparations
+    //   * scan changes in the filesystem
+    //   * enumerate the files to be copied
+    //   * calculate the size of the new backup
+    //      - if the backup is too large, merge the earlist backup
+    //   * write deleted file's relative path into a file
+    // 
 }
 
 } // namespace wbackup
+
+int main() {
+
+}

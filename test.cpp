@@ -2,13 +2,39 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <iterator>
 
 #include "headers/json.hpp"
-#include "config.h"
+// #include "config.h"
 namespace fs = std::filesystem;
 
+class TestForeachContainer {
+private:
+    int *a;
+    size_t size;
+
+public:
+    TestForeachContainer(size_t s) { a = new int[s]; size = s; }
+    ~TestForeachContainer() { delete[] a; }
+    void set(size_t pos, int val) { a[pos] = val; }
+    int at(size_t pos) const { return a[pos]; }
+    
+    int *begin() { return a; }
+    int *end() { return a+size; }
+};
+
 int main() {
+    TestForeachContainer c(5);
+    for (int i=0 ; i<5 ; i++) c.set(i, 91+i);
+    for (auto &i: c) {
+        std::cout << i << std::endl;
+    }
+    return 0;
+}
+
+int main7() {
     std::vector<bool> vb({true, true, true});
+    return 0;
 }
 
 int main6() {

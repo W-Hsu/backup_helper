@@ -6,6 +6,7 @@
 #include <filesystem>
 
 #include "config.h"
+#include "directory_tree.h"
 
 namespace fs = std::filesystem;
 
@@ -15,29 +16,33 @@ namespace wbackup {
 // Specificly, file modifications, deletions, and additions
 //
 // Used for incremental backup
-class File_change_tree {
+class File_change_tree: public Directory_tree {
+public:
+    struct Info;
+
 private:
-    // node[0] is unused, node[1] is root node
-    // node count(max node index)
-    size_t node_cnt;
+    std::vector<struct Info> vals;
 
-    // children pointers
-    std::vector<std::unordered_map<std::string, size_t> > children;
-
-    // change infos
-    std::vector<struct Info> info;
+    size_t new_node() override;
+    void read_backup_chain(const fs::path &dst);
 
 public:
+    ~File_change_tree() override = default;
+
     struct Info {
         enum Status: int {
-            modified = 0,
+            unchanged = 0,
+            modified,
             deleted
         } status;
 
         size_t size;
     };
 
-    void make_tree(fs::path);
+    File_change_tree();
+    void clear() override;
+
+    void make_tree(const fs::path &dst, const fs::path &src);
 };
 
 }

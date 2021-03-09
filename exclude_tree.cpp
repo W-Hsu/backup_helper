@@ -8,8 +8,8 @@ namespace fs = std::filesystem;
 
 namespace wbackup {
 
-Exclude_tree::Exclude_tree()
-    : children(1024), vals(1024), node_cnt(1) { }
+Exclude_tree::Exclude_tree():
+    Directory_tree() { }
 
 size_t Exclude_tree::new_node() {
     if (node_cnt+1==children.size()) {
@@ -18,6 +18,15 @@ size_t Exclude_tree::new_node() {
     }
 
     return ++node_cnt;
+}
+
+void Exclude_tree::clear() {
+    children.clear();
+    vals.clear();
+    children.resize(1024);
+    vals.resize(1024);
+
+    node_cnt = 1;
 }
 
 void Exclude_tree::set(const fs::path &excluded_path_relative, bool val) {
@@ -82,15 +91,6 @@ void Exclude_tree::traverse(std::vector<std::string> &traverse_result) const {
         }
     }
     // TODO
-}
-
-void Exclude_tree::clear() {
-    children.clear();
-    vals.clear();
-    children.resize(1024);
-    vals.resize(1024);
-
-    node_cnt = 1;
 }
 
 }  // namespace wbackup

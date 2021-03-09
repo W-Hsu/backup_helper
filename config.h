@@ -65,7 +65,7 @@ public:
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
     bool is_excluded(const fs::path &query_path) const;
-};
+} configuration;
 
 extern __config_t configuration;
 

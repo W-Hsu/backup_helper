@@ -105,4 +105,10 @@ bool __config_t::is_excluded(const fs::path &query_path) const {
     return exclude_tree.get(p);
 }
 
+// getters
+const fs::path &__config_t::get_destination_path() const { return this->destination; }
+const fs::path &__config_t::get_source_path() const { return this->source; }
+const uint64_t __config_t::get_max_size() const { return this->max_size; }
+bool __config_t::is_excluded(const fs::path &query_path) const { return this->exclude_tree.get(query_path); }
+
 }

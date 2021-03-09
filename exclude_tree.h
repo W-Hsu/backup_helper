@@ -5,39 +5,28 @@
 #include <filesystem>
 #include <unordered_map>
 
+#include "directory_tree.h"
 #include "misc.h"
 
 namespace fs = std::filesystem;
 
 namespace wbackup {
 
-class Exclude_tree {
+class Exclude_tree: public Directory_tree {
 private:
-    // Node [1] is root (chroot to destination or source)
-    // Node [0] is unused
-
-    // node count (max node index)
-    size_t node_cnt;
-
-    // stores children pointers
-    // map or unordered_map, that is a question
-    std::vector<std::unordered_map<std::string, size_t> > children;
-
     // stores values
     std::vector<bool> vals;
 
+    size_t new_node() override;
+
 public:
     Exclude_tree();
-
-    size_t new_node();
+    ~Exclude_tree() override = default;
+    void clear() override;
 
     void set(const fs::path &, bool);
-
     bool get(const fs::path &) const;
-
     void traverse(std::vector<std::string> &traverse_result) const;
-
-    void clear();
 };
 
 } // namespace wbackup
