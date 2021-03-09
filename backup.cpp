@@ -28,6 +28,10 @@ void full_backup(fs::path now_relative) {
     } 
 }
 
+void incremental_backup() {
+    
+}
+
 void merge_backup() {
     
 }
