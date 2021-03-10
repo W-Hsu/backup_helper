@@ -11,6 +11,9 @@ namespace wbackup {
 
 class Directory_tree {
 protected:
+    // default tree size
+    static constexpr size_t default_tree_size = static_cast<size_t>(1024);
+
     // Node [1] is root (chroot to destination or source)
     // Node [0] is unused
 

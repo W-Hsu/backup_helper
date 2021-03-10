@@ -8,6 +8,42 @@
 // #include "config.h"
 namespace fs = std::filesystem;
 
+namespace nstd {
+class A {
+private:
+    int aval;
+public:
+    A(int v): aval(v) { }
+    int get_val() const { return aval; }
+};
+}
+
+class B {
+private:
+    int bval;
+public:
+    B(int v): bval(v) { }
+    int get_val() const { return bval; }
+    operator const nstd::A &() const noexcept {
+        return nstd::A(bval);
+    }
+};
+
+int main() {
+    B b(109);
+    nstd::A a(100);
+    std::cout << a.get_val() << std::endl;
+    a = b;
+    std::cout << a.get_val() << std::endl;
+}
+
+int main9() {
+    fs::path p1("D:/playground");
+    fs::directory_entry i1(p1);
+    fs::path *p2 = new fs::path(i1);
+    delete p2;
+}
+
 class TestForeachContainer {
 private:
     int *a;
@@ -23,7 +59,7 @@ public:
     int *end() { return a+size; }
 };
 
-int main() {
+int main8() {
     TestForeachContainer c(5);
     for (int i=0 ; i<5 ; i++) c.set(i, 91+i);
     for (auto &i: c) {

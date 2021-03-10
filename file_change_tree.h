@@ -24,7 +24,10 @@ private:
     std::vector<struct Info> vals;
 
     size_t new_node() override;
+
     void read_backup_chain(const fs::path &dst);
+    void add_path(const fs::path &relative_path);
+    void delete_path(const fs::path &relative_path);
 
 public:
     ~File_change_tree() override = default;
