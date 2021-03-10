@@ -26,6 +26,8 @@ private:
     size_t new_node() override;
 
     void read_backup_chain(const fs::path &dst);
+    void get_difference(const fs::path &src);
+
     void add_path(const fs::path &relative_path);
     void delete_path(const fs::path &relative_path);
 
@@ -46,6 +48,7 @@ public:
     void clear() override;
 
     void make_tree(const fs::path &dst, const fs::path &src);
+    void traverse(std::vector<fs::path> &need_to_copy_relative) const;
 };
 
 }

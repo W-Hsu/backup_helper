@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -37,18 +38,34 @@ void File_change_tree::read_backup_chain(const fs::path &dst) {
 
     for (auto &i: backup_directory_list) {
         if (fs::is_directory(i/"full")) {
-            clear();
-
-            for (auto &j: fs::recursive_directory_iterator(i/"full")) {
-                add_path(fs::relative(i/"full", fs::canonical(j)));
+            this->clear();
+            for (const auto &j: fs::recursive_directory_iterator(i/"full")) {
+                this->add_path(fs::relative(i/"full", fs::canonical(j)));
             }
             continue;
+        }
+
+        else if (fs::is_directory(i/"incremental")) {
+            std::fstream fin(i/"incremental/deleted.info");
+            if (fin.good()) {
+                std::string s;
+                std::getline(fin, s);
+                this->delete_path(fs::path(s));
+            }
+
+            for (const auto &j: fs::recursive_directory_iterator(i/"incremental")) {
+                this->add_path(fs::relative(i/"incremental", fs::canonical(j)));
+            }
         }
     }
 }
 
 void File_change_tree::make_tree(const fs::path &dst, const fs::path &src) {
-
+    this->read_backup_chain(dst);
+    this->get_difference(src);
+    
+    std::vector<fs::path> result;
+    this->traverse(result);
 }
 
 } // namespace wbackup
