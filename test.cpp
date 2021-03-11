@@ -8,6 +8,16 @@
 // #include "config.h"
 namespace fs = std::filesystem;
 
+int main() {
+    std::string s;
+    std::cin >> s;
+    fs::path dst(s);
+    s.clear();
+    std::cin >> s;
+    fs::path src(s);
+    fs::copy(src, dst);
+}
+
 namespace nstd {
 class A {
 private:
@@ -25,11 +35,11 @@ public:
     B(int v): bval(v) { }
     int get_val() const { return bval; }
     operator const nstd::A &() const noexcept {
-        return nstd::A(bval);
+        return std::move(nstd::A(bval));
     }
 };
 
-int main() {
+int main10() {
     B b(109);
     nstd::A a(100);
     std::cout << a.get_val() << std::endl;

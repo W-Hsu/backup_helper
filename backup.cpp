@@ -40,6 +40,13 @@ void incremental_backup() {
         File_change_tree *file_change_tree = new File_change_tree();
         file_change_tree->make_tree(dst, src);
 
+        std::vector<fs::path> need_to_copy_relative;
+        file_change_tree->traverse(need_to_copy_relative);
+
+        for (const auto &i: need_to_copy_relative) {
+            fs::copy(src/i, dst/i);
+        }
+
         delete file_change_tree;
     } catch (std::exception &ex) {
 

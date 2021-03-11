@@ -63,9 +63,6 @@ void File_change_tree::read_backup_chain(const fs::path &dst) {
 void File_change_tree::make_tree(const fs::path &dst, const fs::path &src) {
     this->read_backup_chain(dst);
     this->get_difference(src);
-    
-    std::vector<fs::path> result;
-    this->traverse(result);
 }
 
 } // namespace wbackup
