@@ -20,7 +20,7 @@ private:
     size_t new_node() override;
 
 public:
-    Exclude_tree();
+    Exclude_tree(size_t initial_size);
     ~Exclude_tree() override = default;
     void clear() override;
 

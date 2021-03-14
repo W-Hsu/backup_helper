@@ -39,7 +39,7 @@ public:
     __config_t(const __config_t &) = delete;
     __config_t(__config_t &&) = delete;
 
-    // Change the backup destination path, and read config.json
+    // Change the backup destin ation path, and read config.json
     // associated with it into (*this)
     //
     // throws File_not_found on:
@@ -64,6 +64,7 @@ public:
     const fs::path &get_destination_path() const;
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
+    void get_backup_list(std::vector<std::string> &ordered_list) const;
     bool is_excluded(const fs::path &query_path) const;
 } configuration;
 

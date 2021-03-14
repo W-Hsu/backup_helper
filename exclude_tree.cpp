@@ -8,8 +8,8 @@ namespace fs = std::filesystem;
 
 namespace wbackup {
 
-Exclude_tree::Exclude_tree():
-    Directory_tree(), vals(default_tree_size) { }
+Exclude_tree::Exclude_tree(size_t initial_size = default_tree_size):
+    Directory_tree(initial_size), vals(initial_size) { }
 
 size_t Exclude_tree::new_node() {
     if (node_cnt+1==children.size()) {

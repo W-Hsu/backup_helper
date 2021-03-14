@@ -28,7 +28,7 @@ protected:
     virtual size_t new_node() = 0;
 
 public:
-    Directory_tree();
+    Directory_tree(size_t default_size);
     virtual ~Directory_tree() = default;
 
     virtual void clear() = 0;
