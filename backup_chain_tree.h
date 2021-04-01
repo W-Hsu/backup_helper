@@ -30,7 +30,7 @@ private:
 
 public:
     struct Info {
-        
+        std::vector<std::string> versions_location;
     };
 
     Backup_chain_tree(const __config_t &fa_conf, size_t init_size);
@@ -45,8 +45,8 @@ public:
     void update();
 
     // scan changes between the backup chain (tree) and the source path
-    // the files to be copied will be stored into param addition
-    // the total size to be copied will be returned by the function
+    // the path of files to be copied will be stored into param relative
+    // the size of files to be copied will be returned by the function
     size_t scan_changes(std::vector<fs::path> &relative) const;
 };
 

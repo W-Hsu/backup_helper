@@ -1,6 +1,5 @@
 #include "backup.h"
 #include "config.h"
-#include "file_change_tree.h"
 
 #include <filesystem>
 #include <exception>
@@ -33,7 +32,7 @@ void full_backup() {
 
 // TODO exception handling
 void incremental_backup() {
-    try {
+    /* try {
         static fs::path dst = configuration.get_destination_path() / "backup_data";
         const fs::path &src = configuration.get_source_path();
 
@@ -50,7 +49,7 @@ void incremental_backup() {
         delete file_change_tree;
     } catch (std::exception &ex) {
 
-    }
+    } */
 }
 
 void merge_backup() {

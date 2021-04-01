@@ -4,8 +4,10 @@
 
 #include <boost/format.hpp>
 #include <fstream>
+#include <filesystem>
 
 using fmt = boost::format;
+namespace fs = std::filesystem;
 
 namespace wbackup {
 
@@ -23,10 +25,16 @@ void __config_t::get_config(const nlohmann::json &j) {
 
     // optional values
     //  * maximum backup size
+    uint64_t fs_capacity = fs::space(destination).free;
+
     try {
         nlohmann::from_json(j["maximimSize"], max_size);
     } catch (std::exception &ex) {
         max_size = 0x1900000000ll;  // 100GB default
+    }
+
+    if (max_size > fs_capacity) {
+        max_size = fs_capacity;
     }
 
     // optional values
@@ -49,8 +57,7 @@ void __config_t::get_config(const nlohmann::json &j) {
 }
 
 void __config_t::change_destination(char const *new_dest_path) {
-    fs::path path(new_dest_path);
-    return change_destination(new_dest_path);
+    return change_destination(fs::path(new_dest_path));
 }
 
 void __config_t::change_destination(const fs::path &new_dest_path) {
@@ -97,6 +104,15 @@ void __config_t::change_destination(const fs::path &new_dest_path) {
     get_config(j);
 
     destination = fs::canonical(new_dest_path);
+}
+
+int __config_t::set_source(const fs::path &new_src_path) {
+    this->source = new_src_path;
+    return 0;
+}
+
+int __config_t::set_source(char const *new_src_path) {
+    return set_source(fs::path(new_src_path));
 }
 
 bool __config_t::is_excluded(const fs::path &query_path) const {

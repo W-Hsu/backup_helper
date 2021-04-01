@@ -88,7 +88,7 @@ size_t Backup_chain_tree::scan_changes(std::vector<fs::path> &addition) const {
     const fs::path &source = fa_conf.get_source_path();
     const fs::path &destination = fa_conf.get_destination_path();
 
-    // Additions
+    // additions
     for (const auto &i: fs::recursive_directory_iterator(source)) {
         // enumerate only regular files
         // TODO symlinks
@@ -112,6 +112,7 @@ size_t Backup_chain_tree::scan_changes(std::vector<fs::path> &addition) const {
     }
 
     // deletions
+    // traverse over the backup_chain_tree, see if the corresponding files are deleted in source
     std::vector<fs::path> deletions;
     std::stack<std::pair<fs::path, size_t> > s;
     s.push(std::make_pair(fs::path(""), static_cast<size_t>(1u)));

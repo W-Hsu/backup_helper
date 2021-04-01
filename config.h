@@ -12,6 +12,11 @@ namespace fs = std::filesystem;
 namespace wbackup {
 
 // data structure to store configurations
+// 
+// note: the configuration items are subject to **destination**
+//       i.e. the destination directory holds all information of a backup
+//       changing the destination means to switch to a different backup source
+
 class __config_t {
 private:
     // backup destination path (canonical)
@@ -39,7 +44,7 @@ public:
     __config_t(const __config_t &) = delete;
     __config_t(__config_t &&) = delete;
 
-    // Change the backup destin ation path, and read config.json
+    // Change the backup destination path, and read config.json
     // associated with it into (*this)
     //
     // throws File_not_found on:
@@ -55,17 +60,25 @@ public:
     void change_destination(char const *new_dest);
     void change_destination(const fs::path &new_dest);
 
-    // change the source path of current backup
-    // called on just recovered backup
-    int change_source(char const *new_src);
-    int change_source(const fs::path &new_src);
+    // change the configuration under the specified destination
+    // i.e. setters
+    int set_source(char const *new_src);
+    int set_source(const fs::path &new_src);
+
+    int set_max_size(size_t new_size);
 
     // getters
     const fs::path &get_destination_path() const;
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
+
+    // get a ordered(arrange by date-time) backup time point list
+    // used to construct a backup_chain_tree
     void get_backup_time_point_list(std::vector<std::string> &ordered_list) const;
+
+    // check if the query path is excluded
     bool is_excluded(const fs::path &query_path) const;
+
 } configuration;
 
 extern __config_t configuration;
