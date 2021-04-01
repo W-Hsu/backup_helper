@@ -64,7 +64,7 @@ public:
     const fs::path &get_destination_path() const;
     const fs::path &get_source_path() const;
     const uint64_t get_max_size() const;
-    void get_backup_list(std::vector<std::string> &ordered_list) const;
+    void get_backup_time_point_list(std::vector<std::string> &ordered_list) const;
     bool is_excluded(const fs::path &query_path) const;
 } configuration;
 

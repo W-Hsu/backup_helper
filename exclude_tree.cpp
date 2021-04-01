@@ -21,12 +21,8 @@ size_t Exclude_tree::new_node() {
 }
 
 void Exclude_tree::clear() {
-    children.clear();
-    vals.clear();
-    children.resize(1024);
-    vals.resize(1024);
-
-    node_cnt = 1;
+    Directory_tree::clear();
+    vals.resize(initial_tree_size);
 }
 
 void Exclude_tree::set(const fs::path &excluded_path_relative, bool val) {

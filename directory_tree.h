@@ -12,16 +12,26 @@ namespace wbackup {
 class Directory_tree {
 protected:
     // default tree size
+    //
+    // the size of default-constructed tree
+    // see Constructor
     static constexpr size_t default_tree_size = static_cast<size_t>(1024);
-
-    // Node [1] is root (chroot to destination or source)
-    // Node [0] is unused
+    
+    // initial tree size
+    //
+    // record initial size of the tree
+    // if the tree is default-constructed, it is equal with default_tree_size
+    // if there's a param given in the constructor, it is set by the param
+    size_t const initial_tree_size;
 
     // node count (max node index)
+    //
+    // Node [1] is the root/chroot node
+    // Node [0] is unused
     size_t node_cnt;
 
     // stores children pointers
-    // map or unordered_map, that is a question
+    // TODO map or unordered_map, that is a question
     std::vector<std::unordered_map<std::string, size_t> > children;
 
     // create new node in the tree
@@ -31,7 +41,7 @@ public:
     Directory_tree(size_t default_size);
     virtual ~Directory_tree() = default;
 
-    virtual void clear() = 0;
+    virtual void clear();
 };
 
 } // namespace wbackup
