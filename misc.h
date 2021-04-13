@@ -26,15 +26,12 @@ void split(const std::string &s, std::vector<std::string> &splitted, char delim 
     }
 }
 
-std::string get_system_time() {
-    time_t now_timestamp = cron::system_clock::to_time_t(cron::system_clock::now());
-    struct tm *ptm = gmtime(&now_timestamp);
-
-    return (
-        //    y    m    d    h    m    s
-        fmt("%d_%02d_%02d_%02d_%02d_%02d")
-            % ptm->tm_year % ptm->tm_mon % ptm->tm_mday % ptm->tm_hour % ptm->tm_min % ptm->tm_sec
-    ).str();
+template <class T>
+T get_val(const std::string &s) {
+    std::stringstream sstr(s);
+    T ret;
+    sstr >> ret;
+    return ret;
 }
 
 bool is_same(const fs::path &a, const fs::path &b) {
@@ -47,6 +44,11 @@ bool is_same(const fs::path &a, const fs::path &b) {
     }
     else
         return false;
+}
+
+bool is_leap_year(int year) {
+    if (year%100==0) return year%400==0;
+    return year%4==0;
 }
 
 }  // namespace wbackup

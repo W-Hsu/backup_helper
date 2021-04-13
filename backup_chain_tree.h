@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "directory_tree.h"
+#include "datetime.h"
 
 namespace fs = std::filesystem;
 
@@ -16,10 +17,6 @@ public:
 
 private:
     std::vector<struct Info> vals;
-
-    // father configuration structure
-    // for multi-tasking
-    const __config_t &fa_conf;
 
     // allocate a node in the unused area
     // if it's out of space, this func will try to allocate more
@@ -33,7 +30,7 @@ public:
         std::vector<std::string> versions_location;
     };
 
-    Backup_chain_tree(const __config_t &fa_conf, size_t init_size);
+    Backup_chain_tree(size_t init_size);
     ~Backup_chain_tree() override = default;
 
     // clear the backup chain tree to its inital states

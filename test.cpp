@@ -5,10 +5,40 @@
 #include <iterator>
 
 #include "headers/json.hpp"
+#include "datetime.h"
 // #include "config.h"
 namespace fs = std::filesystem;
 
 int main() {
+    struct tm t;
+    time_t tme = time(NULL);
+    gmtime_r(&tme, &t);
+    return 0;
+}
+
+/*int main13() {
+    time_t now = time(NULL);
+    wbackup::DateTime d1(now), d2(now);
+    if (d2<d1) std::cout << "fail" << std::endl;
+    d1.hour++;
+    if (d2<d1) std::cout << "success" << std::endl;
+    return 0;
+}*/
+
+int main12() {
+    std::vector<fs::path> vec;
+    vec.clear();
+    size_t total = 0ull;
+    for (auto &i: fs::recursive_directory_iterator("/Users/whsu")) {
+        vec.push_back(i);
+        total++;
+    }
+    std::cout << total << std::endl;
+    std::cin.get();
+    return 0;
+}
+
+int main11() {
     std::string s;
     std::cin >> s;
     fs::path dst(s);

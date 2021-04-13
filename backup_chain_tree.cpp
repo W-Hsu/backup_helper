@@ -7,8 +7,8 @@
 
 namespace wbackup {
 
-Backup_chain_tree::Backup_chain_tree(const __config_t &fa_conf, size_t init_size=default_tree_size):
-    Directory_tree(init_size), vals(init_size), fa_conf(fa_conf) { }
+Backup_chain_tree::Backup_chain_tree(size_t init_size=default_tree_size):
+    Directory_tree(init_size), vals(init_size) { }
 
 size_t Backup_chain_tree::new_node() {
     if (node_cnt+1==children.size()) {
@@ -30,10 +30,10 @@ void Backup_chain_tree::update() {
 
     // get all the names of the backup time point
     std::vector<std::string> backup_time_point_list;
-    fa_conf.get_backup_time_point_list(backup_time_point_list);
+    configuration.get_backup_time_point_list(backup_time_point_list);
 
     // get destination path
-    const fs::path &destination = fa_conf.get_destination_path();
+    const fs::path &destination = configuration.get_destination_path();
 
     // find the last full backup, then build the backup chain tree from that point
     auto it = backup_time_point_list.begin();
@@ -85,8 +85,8 @@ size_t Backup_chain_tree::scan_changes(std::vector<fs::path> &addition) const {
     addition.clear();
     size_t backup_size = static_cast<size_t>(0u);
     
-    const fs::path &source = fa_conf.get_source_path();
-    const fs::path &destination = fa_conf.get_destination_path();
+    const fs::path &source = configuration.get_source_path();
+    const fs::path &destination = configuration.get_destination_path();
 
     // additions
     for (const auto &i: fs::recursive_directory_iterator(source)) {
@@ -101,7 +101,7 @@ size_t Backup_chain_tree::scan_changes(std::vector<fs::path> &addition) const {
 
         // if file is excluded or unchanged, then skip the file
         if (
-            (fa_conf.is_excluded(relative_path)) ||
+            (configuration.is_excluded(relative_path)) ||
             (fs::exists(destination_correspond) && is_same(i, destination_correspond))
         ) {
             continue;
