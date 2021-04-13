@@ -6,17 +6,23 @@
 #include "config.h"
 #include "directory_tree.h"
 #include "datetime.h"
+#include "file_info.h"
+#include "latest_tree.h"
 
 namespace fs = std::filesystem;
 
 namespace wbackup {
 
+// store the backup chain information
+// 
+// it represents the changing history of every file 
+//    i.e. when is the file created, modified, or deleted
+// the info is for recovering backup and viewing backup
+//
+// TODO only load data when needed
 class Backup_chain_tree: public Directory_tree {
-public:
-    struct Info;
-
 private:
-    std::vector<struct Info> vals;
+    std::vector<File_info> vals;
 
     // allocate a node in the unused area
     // if it's out of space, this func will try to allocate more
@@ -26,12 +32,11 @@ private:
     void delete_path(const fs::path &relative);
 
 public:
-    struct Info {
-        std::vector<std::string> versions_location;
-    };
-
     Backup_chain_tree(size_t init_size);
     ~Backup_chain_tree() override = default;
+
+    // show info of a file/folder
+    void lsfile(const fs::path &relative_path, DateTime time_point, std::vector<std::pair<fs::path, fs::file_type> > &vec);
 
     // clear the backup chain tree to its inital states
     // all nodes and the topographical info will be lost
@@ -39,12 +44,10 @@ public:
     void clear() override;
 
     // Update the backup chain tree when the destination directory is modified, or the destination path has changed 
-    void update();
+    void rebuild();
 
-    // scan changes between the backup chain (tree) and the source path
-    // the path of files to be copied will be stored into param relative
-    // the size of files to be copied will be returned by the function
-    size_t scan_changes(std::vector<fs::path> &relative) const;
+    // Reconstruct Latest tree on backup error
+    Latest_tree rebuild_latest_tree();
 };
 
 } // namespace wbackup 

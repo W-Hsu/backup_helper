@@ -11,12 +11,11 @@ namespace fs = std::filesystem;
 
 namespace wbackup {
 
-// data structure to store configurations
+// data structure to store configurations corresponding with destination/config.json
 // 
 // note: the configuration items are subject to **destination**
 //       i.e. the destination directory holds all information of a backup
 //       changing the destination means to switch to a different backup source
-
 class __config_t {
 private:
     // backup destination path (canonical)

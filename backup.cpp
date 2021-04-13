@@ -10,7 +10,7 @@ namespace wbackup {
 
 // TODO exception handling
 void full_backup() {
-    static fs::path dst = configuration.get_destination_path() / "back_data" / get_system_time();
+    static fs::path dst = configuration.get_destination_path() / "back_data" / "system_time";
     const fs::path &src = configuration.get_source_path();
     
     fs::recursive_directory_iterator rec_iterator(src);
